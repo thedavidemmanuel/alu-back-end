@@ -18,8 +18,6 @@ if __name__ == "__main__":
     total_tasks = len(todos)
     completed_tasks = [task for task in todos if task.get("completed")]
 
-    print("Employee {} is done with tasks({}/{})".format(employee_name, len(completed_tasks), total_tasks))
-    print("Completed tasks:")
+    print("Employee {} is done with tasks({}/{}):".format(employee_name, len(completed_tasks), total_tasks))
     for task in completed_tasks:
         print("\t {}".format(task.get("title")))
-
