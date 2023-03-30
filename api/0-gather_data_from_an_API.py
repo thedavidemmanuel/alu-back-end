@@ -1,15 +1,12 @@
 #!/usr/bin/python3
-import requests
 import sys
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: {} <employee_id>".format(sys.argv[0]))
-        sys.exit(1)
+import requests
 
-    employee_id = sys.argv[1]
-    user_url = "https://jsonplaceholder.typicode.com/users/{}".format(employee_id)
-    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(employee_id)
+
+def main(employee_id):
+    user_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+    todos_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
 
     user = requests.get(user_url).json()
     todos = requests.get(todos_url).json()
@@ -18,6 +15,16 @@ if __name__ == "__main__":
     total_tasks = len(todos)
     completed_tasks = [task for task in todos if task.get("completed")]
 
-    print("Employee {} is done with tasks({}/{}):".format(employee_name, len(completed_tasks), total_tasks))
+    print(f"Employee {employee_name} is done with tasks({len(completed_tasks)}/{total_tasks}):")
     for task in completed_tasks:
-        print("\t {}".format(task.get("title")))
+        print(f"\t {task.get('title')}")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print(f"Usage: {sys.argv[0]} <employee_id>")
+        sys.exit(1)
+
+    employee_id = sys.argv[1]
+    main(employee_id)
+
