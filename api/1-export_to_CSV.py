@@ -1,31 +1,51 @@
 #!/usr/bin/python3
 """
-Python script that returns TODO list progress for a given employee ID
-and exports the data to a CSV file.
+    python script that exports data in the CSV format
 """
 import csv
 import json
 import requests
 from sys import argv
 
+
 if __name__ == "__main__":
-    # Request employee info by employee ID
+    """
+        request user info by employee ID
+    """
     request_employee = requests.get(
         'https://jsonplaceholder.typicode.com/users/{}/'.format(argv[1]))
-    employee = json.loads(request_employee.text)
-    employee_name = employee.get("name")
+    """
+        convert json to dictionary
+    """
+    user = json.loads(request_employee.text)
+    """
+        extract username
+    """
+    username = user.get("username")
 
-    # Request user's TODO list
+    """
+        request user's TODO list
+    """
     request_todos = requests.get(
         'https://jsonplaceholder.typicode.com/users/{}/todos'.format(argv[1]))
-    employee_todos = json.loads(request_todos.text)
+    """
+        dictionary to store task status(completed) in boolean format
+    """
+    tasks = {}
+    """
+        convert json to list of dictionaries
+    """
+    user_todos = json.loads(request_todos.text)
+    """
+        loop through dictionary & get completed tasks
+    """
+    for dictionary in user_todos:
+        tasks.update({dictionary.get("title"): dictionary.get("completed")})
 
-    # Export data to a CSV file
-    with open('{}.csv'.format(argv[1]), 'w', newline='') as csvfile:
-        csv_writer = csv.writer(csvfile, delimiter=',',
-                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        for todo in employee_todos:
-            csv_writer.writerow([argv[1], employee_name, todo['completed'], todo['title']])
-
-    print("Data exported to {}.csv".format(argv[1]))
-
+    """
+        export to CSV
+    """
+    with open('{}.csv'.format(argv[1]), mode='w') as file:
+        file_editor = csv.writer(file, delimiter=',', quoting=csv.QUOTE_ALL)
+        for k, v in tasks.items():
+            file_editor.writerow([argv[1], username, v, k])
