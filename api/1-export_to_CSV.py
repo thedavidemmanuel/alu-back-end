@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
-    Python script that returns TODO list progress for a given employee ID
-    and exports the data to a CSV file.
+Python script that returns TODO list progress for a given employee ID
+and exports the data to a CSV file.
 """
 import csv
 import json
